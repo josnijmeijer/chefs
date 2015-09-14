@@ -8,13 +8,15 @@
 # figure out what is actually needed and removing all clutter
 # domain join
 # logfiles/dynamic naming/path
-# todo: na installatie van fileservices is er een reboot nodig. hierdoor installeert ie de andere subfeatures niet goed. Oplossing nu: haal de check op installatie weg en draai het script voor de 2e keer. uitzoeken hoe dit in 1 powershell script te krijgen is
+# todo: na installatie van fileservices(?) is er een reboot nodig. hierdoor installeert ie de andere subfeatures niet goed. Oplossing nu: haal de check op installatie weg en draai het script voor de 2e keer. uitzoeken hoe dit in 1 powershell script te krijgen is
 # optie: eerst fileservices installeren dan reboot, dan alle subfeatures. Chef lifecycle events gebruiken? of powershell native features?
+# powershell - restart commando levert niet het gewenste resultaat. Misschien alle rollen en features apart te installeren (checken met een not_if en koppelen aan het lifecycle event 'setup'? dan eerst uitzoeken wat je exact nodig hebt!
+# logfile bekeken: er is geen logfile installfs.log dus die wordt helemaal overgeslagen omdat de windows file and storage services al geinstalleerd zijn, dus andere boolean selecteren (if any). Checked nu op FS-DFS-Namespace (want die is niet default)
 
 powershell_script 'Install FS' do 
 	code 'Add-WindowsFeature FileAndStorage-Services -IncludeAllSubFeature -IncludeManagementTools -LogPath c:\users\administrator\.chef\installFS.log -Restart'	
 	guard_interpreter :powershell_script
-	not_if "(Get-WindowsFeature -Name FileAndStorage-Services).Installed"
+	not_if "(Get-WindowsFeature -Name FS-DFS-Namespace).Installed"
 end
 
 powershell_script 'Install FileServices Tools' do
