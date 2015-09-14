@@ -29,7 +29,7 @@ powershell_script 'Install Windows-Server-Backup' do
 	not_if "(Get-WindowsFeature -Name Windows-Server-Backup).Installed"
 end
 
- 
+=begin
 powershell_script 'Restart-computer' do 
     code 'Restart-Computer'  
     guard_interpreter :powershell_script
