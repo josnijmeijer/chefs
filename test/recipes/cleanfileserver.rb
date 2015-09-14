@@ -23,7 +23,7 @@ end
 powershell_script 'Install FileServices Tools' do
 	code 'Add-WindowsFeature RSAT-File-Services -IncludeAllSubFeature -IncludeManagementTools -LogPath c:\users\administrator\.chef\installFSTools.log -Restart'
 	guard_interpreter :powershell_script
-	not_if "(Get-WindowsFeature -name RSAT-FSRM-Mgmt).Installed"
+	not_if "(Get-WindowsFeature -name RSAT-CoreFile-Mgmt).Installed"
 
 end
 
